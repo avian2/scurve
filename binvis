@@ -7,9 +7,12 @@ from PIL import Image, ImageDraw
 
 class _Color:
     def __init__(self, data, block):
-        self.data, self.block = data, block
-        s = list(set(data))
-        s.sort()
+        self.data = data
+        self.block = block
+        unique_data = set()
+        for d in data:
+            unique_data.add(d)
+        s = sorted(list(d))
         self.symbol_map = {v : i for (i, v) in enumerate(s)}
 
     def __len__(self):
