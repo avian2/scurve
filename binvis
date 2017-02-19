@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os.path, math, string, sys
 import scurve
+import mmap
 from scurve import progress, utils, draw
 from PIL import Image, ImageDraw
 
@@ -12,7 +13,10 @@ class _Color:
         unique_data = set()
         for d in data:
             unique_data.add(d)
-        s = sorted(list(d))
+            # Iterating over bytes, so if we already have 256, we're done
+            if len(unique_data) > 255:
+                break
+        s = sorted(list(unique_data))
         self.symbol_map = {v : i for (i, v) in enumerate(s)}
 
     def __len__(self):
@@ -165,8 +169,8 @@ def main():
     options, args = parser.parse_args()
     if len(args) not in [1, 2]:
         parser.error("Please specify input and output file.")
-
-    d = file(args[0]).read()
+    input_file = open(args[0], 'r')
+    d = mmap.mmap(input_file.fileno(), 0, prot=mmap.PROT_READ)
     if len(args) == 2:
         dst = args[1]
     else:
