@@ -18,9 +18,9 @@ def raises(exc, obj, *args, **kwargs):
         :kwargs Arguments to be passed to the callable.
     """
     try:
-        apply(obj, args, kwargs)
-    except Exception, v:
-        if isinstance(exc, basestring):
+        obj(*args, **kwargs)
+    except Exception as v:
+        if isinstance(exc, str):
             if exc.lower() in str(v).lower():
                 return
             else:
@@ -74,7 +74,7 @@ def is_traversal(lst):
 def symmetry(c):
     l1 = list(c)
     l2 = [c.index(i) for i in l1]
-    assert l2 == range(len(c))
+    assert l2 == list(range(len(c)))
 
 
 

@@ -1,9 +1,9 @@
 import scurve.progress as progress
-import StringIO
+import io
 
 class TestInplace:
     def test_basic(self):
-        s = StringIO.StringIO()
+        s = io.StringIO()
         c = progress.Inplace(stream=s)
         assert s.getvalue() ==  ''
         c.tick(10)
@@ -21,7 +21,7 @@ class TestInplace:
 
 class TestProgress:
     def test_basic(self):
-        s = StringIO.StringIO()
+        s = io.StringIO()
         p = progress.Progress(100, stream=s)
         p.tick(25)
         assert p.prev == 0.25

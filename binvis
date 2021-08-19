@@ -12,7 +12,7 @@ class _Color:
         self.block = block
         unique_data = set()
         for d in data:
-            unique_data.add(d)
+            unique_data.add(ord(d))
             # Iterating over bytes, so if we already have 256, we're done
             if len(unique_data) > 255:
                 break
@@ -31,7 +31,7 @@ class _Color:
 
 class ColorGradient(_Color):
     def getPoint(self, x):
-        c = ord(self.data[x])/255.0
+        c = int(self.data[x])/255.0
         return [
             int(255*c),
             int(255*c),
@@ -46,13 +46,13 @@ class ColorHilbert(_Color):
         self.step = len(self.csource)/float(len(self.symbol_map))
 
     def getPoint(self, x):
-        c = self.symbol_map[self.data[x]]
+        c = self.symbol_map[int(self.data[x])]
         return self.csource.point(int(c*self.step))
 
 
 class ColorClass(_Color):
     def getPoint(self, x):
-        c = ord(self.data[x])
+        c = int(self.data[x])
         if c == 0:
             return [0, 0, 0]
         elif c == 255:
@@ -180,7 +180,7 @@ def main():
         dst = base + options.suffix + ".png"
 
     if os.path.exists(dst) and len(args) < 2:
-        print >> sys.stderr, "Refusing to over-write '%s'. Specify explicitly if you really want to do this."%dst
+        print("Refusing to over-write '%s'. Specify explicitly if you really want to do this."%dst, file=sys.stderr)
         sys.exit(1)
 
     block = None
@@ -206,7 +206,7 @@ def main():
 
 
     if options.progress:
-        print dst
+        print(dst)
 
     if options.quiet or options.progress:
         prog = progress.Dummy()
